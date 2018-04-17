@@ -67,15 +67,16 @@ function filterLamPostData( $data , $postarr ) {
     // CHECK THAT THE USERNAME DOES NOT ALREADY EXIST
     $user_id        = username_exists( $user_name );
 
-    // SINCE WE DON'T CARE ABOUT THE REAL EMAILS, WE JUST ASSIGN EACH MANAGED AUTHOR AN EMPTY
+    // SINCE WE DON'T CARE ABOUT THE REAL EMAILS, WE JUST ASSIGN EACH MANAGED AUTHOR AN EMPTY EMAIL
     $user_email     = null;
 
-    // NO NEED TO CHECK IF THE EMAIL EXISTS SINCE IT IS THE SAME FOR ALL MANAGED AUTHORS.
+    // NO NEED TO CHECK IF THE EMAIL EXISTS: EMAIL IS THE SAME (NULL) FOR ALL MANAGED AUTHORS ANYWAYS.
     if ( !$user_id) {           //  && email_exists($user_email) == false
         // NOW GENERATE SOME PASSWORDS (JUST TO SATISFY WORDPRESS)  - THEN CREATE THE USER AFTERWARDS.
         $random_password        = wp_generate_password( $length=12, $include_standard_special_chars=false );
         $user_id                = wp_create_user( $user_name, $random_password, $user_email );
     }
+	// EXPOSE THE AUTHOR'S ID TO THE GLOBAL SCOPE SO IT IS ACCESSIBLE TO FUNCTIONS NEED IT
     $GLOBALS['LAM']['AUTHOR']   = $user_id;
 
     updateManagedAuthorMetaData($user_id, $fistLastName);
@@ -88,7 +89,7 @@ function updateManagedAuthorMetaData($user_id, $fistLastName){
     $update_data['user_url']            = "https://wordpress.org/ionurboz";
     $update_data['first_name']          = isset($fistLastName[0]) ? $fistLastName[0] :  "";
     $update_data['last_name']           = isset($fistLastName[1]) ? $fistLastName[1] :  "";
-    $update_data['wp_capabilities']     = ['author'=>true];     //serialize();
+    $update_data['wp_capabilities']     = ['author'=>true];
     $update_data['wp_user_level']       = 8;
 
     foreach($update_data as $key => $value) {
@@ -132,7 +133,6 @@ function deactivateLAMPlugin(){
     // TODO
 }
 
-
 add_action( 'save_post',            'updateAuthorMeta');
 add_action( 'init',                 'registerLamPostType',  0 );
 add_filter( 'wp_insert_post_data',  'filterLamPostData',    '99', 2 );
@@ -140,6 +140,7 @@ add_filter( 'wp_insert_post_data',  'filterLamPostData',    '99', 2 );
 if ( is_admin() ) {
     add_action( 'admin_init',       'handleAfterDeletionProcessing' );
 }
+
 
 // REGISTER PLUGIN ACTIVATION HOOK
 register_activation_hook(LAM_PLUGIN_FILE, 'activateLAMPlugin');
