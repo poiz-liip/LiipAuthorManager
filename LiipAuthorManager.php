@@ -41,7 +41,7 @@ function registerLamPostType(){
         'label'               => __( 'managed_authors', 'lam' ),
         'description'         => __( 'Manage Authors who are registered without Emails.', 'lam' ),
         'labels'              => $labels,
-        'supports'            => array( 'title', 'revisions', 'custom-fields', ),       // 'editor', 'excerpt', 'author', 'thumbnail', 'comments',
+        'supports'            => array( 'title', 'revisions', 'custom-fields', ),
         'taxonomies'          => [],
         'hierarchical'        => false,
         'public'              => false,
