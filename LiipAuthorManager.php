@@ -76,7 +76,8 @@ function filterLamPostData( $data , $postarr ) {
         $random_password        = wp_generate_password( $length=12, $include_standard_special_chars=false );
         $user_id                = wp_create_user( $user_name, $random_password, $user_email );
     }
-	// EXPOSE THE AUTHOR'S ID TO THE GLOBAL SCOPE SO IT IS ACCESSIBLE TO FUNCTIONS NEED IT
+
+	// EXPOSE THE AUTHOR'S ID TO THE GLOBAL SCOPE SO IT IS ACCESSIBLE TO FUNCTIONS THAT NEED IT
     $GLOBALS['LAM']['AUTHOR']   = $user_id;
 
     updateManagedAuthorMetaData($user_id, $fistLastName);
