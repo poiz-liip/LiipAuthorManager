@@ -1,4 +1,4 @@
-#LiipAuthorManager
+# LiipAuthorManager
 
 A plugin that enables Wordpress Site Administrators or Editors to create Virtual Authors (without a need for Author E-Mail). 
 
