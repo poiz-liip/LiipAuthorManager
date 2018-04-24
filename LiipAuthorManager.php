@@ -100,26 +100,6 @@ function updateManagedAuthorMetaData( $user_id, $fistLastName ) {
 	}
 }
 
-function handleAfterDeletionProcessing() {
-	add_action( 'before_delete_post', 'synchronizeUserData', 10 );
-}
-
-function synchronizeUserData( $post_id ) {
-	global $wpdb;
-	$prefix = $wpdb->prefix;
-	$uid    = get_post_meta( $post_id, 'lam_uid', true );
-
-	// DO WE HAVE A USER WITH THE GIVEN USER-ID ($uid)?
-	// IF WE DO, WE MAY HAVE TO DELETE THAT AS WELL....
-	if ( $wpdb->get_var( $wpdb->prepare( 'SELECT ID FROM ' . $prefix . 'users WHERE ID = %d', $uid ) ) ) {
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $prefix . 'users WHERE ID = %d', $uid ) );
-		// SIMILARLY, CHECK IF THE USER_META EXIST FOR THE GIVEN $uid AND DELETE IT AS WELL
-		if ( $wpdb->get_var( $wpdb->prepare( 'SELECT user_id FROM ' . $prefix . 'usermeta WHERE user_id = %d', $uid ) ) ) {
-			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $prefix . 'usermeta WHERE user_id = %d', $uid ) );
-		}
-	}
-}
-
 function updateAuthorMeta( $post_id ) {
 	if ( wp_is_post_revision( $post_id ) ) {
 		return;
@@ -143,9 +123,6 @@ add_action( 'save_post', 'updateAuthorMeta' );
 add_action( 'init', 'registerLamPostType', 0 );
 add_filter( 'wp_insert_post_data', 'filterLamPostData', '99', 2 );
 
-if ( is_admin() ) {
-	add_action( 'admin_init', 'handleAfterDeletionProcessing' );
-}
 
 // REGISTER PLUGIN ACTIVATION HOOK
 register_activation_hook( LAM_PLUGIN_FILE, 'activateLAMPlugin' );
