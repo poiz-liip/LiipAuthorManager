@@ -9,5 +9,5 @@ This Plugin uses only one Field: Wordpress' *post_title* Field.
 This Field is used to gather the first & last Names of the newly added Author with space as the delimiter. 
 During the saving of the Post, the Author is automatically saved as a normal **Wordpress User (with the Role of an Author)**.
 
-This makes it easy to create an Author in a matter of seconds and have it available as within the Users List
+This makes it easy to create an Author in a matter of seconds and have it available within the Users List
 and ready to be referenced from any Blog. Simple, huh?
